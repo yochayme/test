@@ -12,7 +12,7 @@ metadata:
   name: app-6-4-server-home-folder-dev
 spec:
   capacity:
-    storage: 10Gi
+    storage: 11Gi
   accessModes:
     - ReadWriteMany
   nfs:
