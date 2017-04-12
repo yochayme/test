@@ -2,19 +2,39 @@ kind: Namespace
 apiVersion: v1
 metadata:
   labels:
-    app: app-6-4
-    env: dev
-  name: yochay2
+  name: sampleapps
 ---
-apiVersion: v1
-kind: PersistentVolume
+kind: Deployment
+apiVersion: extensions/v1beta1
 metadata:
-  name: app-6-4-server-home-folder-dev
+  name: sampleapp
+  namespace: sampleapps
 spec:
-  capacity:
-    storage: 11Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: 10.0.0.1
-    path: "/"
+  selector:
+    matchLabels:
+      app: sampleapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sampleapp
+    spec:
+      containers:
+      - name: sampleapp
+        image: cddirector/sampleapp:1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sampleapp-service
+  namespace: sampleapps
+spec:
+  ports:
+  - protocol: TCP
+    port: 8080
+  selector:
+    app: sampleapp
